@@ -682,90 +682,114 @@
         {
           q: "1️⃣ O que é placenta prévia?",
           opts: [
-            "A) Placenta implantada na parte superior do útero",
-            "B) Placenta implantada no segmento inferior do útero",
-            "C) Placenta ausente",
+            "Placenta implantada na parte superior do útero",
+            "Placenta implantada no segmento inferior do útero",
+            "Placenta ausente",
           ],
           correct: 1,
         },
         {
           q: "2️⃣ Qual é o principal sintoma da placenta prévia?",
           opts: [
-            "A) Dor abdominal intensa",
-            "B) Sangramento vaginal vermelho-vivo e indolor",
-            "C) Febre alta",
-          ],
+            "Dor abdominal intensa",
+            "Sangramento vaginal vermelho-vivo e indolor",
+            "Febre alta",
+          ], 
           correct: 1,
         },
         {
           q: "3️⃣ A placenta prévia pode obstruir parcialmente ou totalmente qual estrutura?",
           opts: [
-            "A) Trompas uterinas",
-            "B) Colo do útero",
-            "C) Ovário direito",
+            "Trompas uterinas",
+            "Colo do útero",
+            "Ovário direito",
           ],
           correct: 1,
         },
         {
           q: "4️⃣ Qual exame é o mais indicado para confirmar o diagnóstico de placenta prévia?",
           opts: [
-            "A) Raio-X do abdômen",
-            "B) Ultrassonografia, preferencialmente transvaginal",
-            "C) Toque vaginal",
+            "Raio-X do abdômen",
+            "Ultrassonografia, preferencialmente transvaginal",
+            "Toque vaginal",
           ],
           correct: 1,
         },
         {
           q: "5️⃣ O toque vaginal antes do diagnóstico é:",
           opts: [
-            "A) Permitido, pois ajuda no diagnóstico",
-            "B) Contraindicado, pois pode causar hemorragia",
-            "C) Obrigatório em todo atendimento",
+            "Permitido, pois ajuda no diagnóstico",
+            "Contraindicado, pois pode causar hemorragia",
+            "Obrigatório em todo atendimento",
           ],
           correct: 1,
         },
         {
           q: "6️⃣ Qual via de parto é recomendada na maioria dos casos de placenta prévia?",
-          opts: ["A) Cesárea", "B) Parto vaginal normal", "C) Fórceps"],
+          opts: ["Cesárea", "Parto vaginal normal", "Fórceps"],
           correct: 0,
         },
         {
           q: "7️⃣ Qual é um importante fator de risco para placenta prévia?",
           opts: [
-            "A) Baixa estatura materna",
-            "B) Histórico de cesariana anterior",
-            "C) Prática de exercícios físicos",
+            "Baixa estatura materna",
+            "Histórico de cesariana anterior",
+            "Prática de exercícios físicos",
           ],
           correct: 1,
         },
         {
           q: "8️⃣ Quando o sangramento da placenta prévia geralmente ocorre?",
           opts: [
-            "A) Antes da 12ª semana",
-            "B) Após a 20ª semana de gestação",
-            "C) Apenas após o parto",
+            "Antes da 12ª semana",
+            "Após a 20ª semana de gestação",
+            "Apenas após o parto",
           ],
           correct: 1,
         },
         {
           q: "9️⃣ Como costuma estar o útero na placenta prévia?",
           opts: [
-            "A) Rígido e doloroso",
-            "B) Macio e indolor",
-            "C) Contrações regulares",
+            "Rígido e doloroso",
+            "Macio e indolor",
+            "Contrações regulares",
           ],
           correct: 1,
         },
         {
           q: "🔟 Qual cuidado de enfermagem é essencial?",
           opts: [
-            "A) Incentivar atividade física intensa",
-            "B) Monitorar sinais vitais e sangramento",
-            "C) Realizar toque vaginal de rotina",
+            "Incentivar atividade física intensa",
+            "Monitorar sinais vitais e sangramento",
+            "Realizar toque vaginal de rotina",
           ],
           correct: 1,
         },
       ];
+
+      // Função para embaralhar as alternativas de cada pergunta
+      function shuffleQuestions() {
+        quiz.forEach(item => {
+          // Criar um array de objetos com o texto e o índice original
+          const optsWithIndex = item.opts.map((opt, i) => ({
+            text: opt,
+            wasCorrect: i === item.correct
+          }));
+          
+          // Embaralhar o array usando Fisher-Yates shuffle
+          for (let i = optsWithIndex.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [optsWithIndex[i], optsWithIndex[j]] = [optsWithIndex[j], optsWithIndex[i]];
+          }
+          
+          // Atualizar as opções e o índice correto
+          item.opts = optsWithIndex.map(opt => opt.text);
+          item.correct = optsWithIndex.findIndex(opt => opt.wasCorrect);
+        });
+      }
+
+      // Embaralhar as alternativas ao iniciar
+      shuffleQuestions();
 
       let idx = 0;
       let time = 10;
@@ -1094,7 +1118,34 @@
       
       // Tentar reproduzir áudio automaticamente quando a página carregar
       window.addEventListener('load', () => {
-        setTimeout(autoPlayAudio, 500); // Pequeno delay para garantir que tudo carregou
+        setTimeout(() => {
+          if (audioEnabled && !introPlayed) {
+            introAudio.play().then(() => {
+              introPlayed = true;
+              console.log("Intro tocando automaticamente");
+            }).catch(e => {
+              console.log("Autoplay bloqueado, aguardando interação do usuário");
+              // Se o autoplay falhar, tenta novamente na primeira interação
+              document.addEventListener('click', () => {
+                if (!introPlayed && audioEnabled) {
+                  introAudio.play().then(() => {
+                    introPlayed = true;
+                    console.log("Intro tocando após clique");
+                  }).catch(err => console.log("Erro ao tocar intro:", err));
+                }
+              }, { once: true });
+              
+              document.addEventListener('keydown', () => {
+                if (!introPlayed && audioEnabled) {
+                  introAudio.play().then(() => {
+                    introPlayed = true;
+                    console.log("Intro tocando após tecla");
+                  }).catch(err => console.log("Erro ao tocar intro:", err));
+                }
+              }, { once: true });
+            });
+          }
+        }, 500); // Pequeno delay para garantir que tudo carregou
       });
     </script>
   </body>
