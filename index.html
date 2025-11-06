@@ -692,7 +692,7 @@
           q: "2️⃣ Qual é o principal sintoma da placenta prévia?",
           opts: [
             "Dor abdominal intensa",
-            "Sangramento vaginal vermelho-vivo e indolor",
+            "Sangramento vaginal vermelho",
             "Febre alta",
           ], 
           correct: 1,
@@ -970,11 +970,25 @@
 
       function tick() {
         time -= 1;
+        if (time < 0) time = 0;
         updateTimerUI();
         if (time <= 0) {
           stopTimer();
           playTimeUpAudio();
-          reveal();
+          // NÃO revelar automaticamente — aguarda o clique do usuário no botão "Revelar"
+          // Ajustes visuais para indicar tempo estourado
+          ringEl.style.animation = "none";
+          ringEl.style.filter = "drop-shadow(0 0 20px rgba(239,68,68,.8))";
+
+          // Desabilitar interações nas opções e dar feedback visual
+          [...answersEl.children].forEach(node => {
+            try {
+              node.style.pointerEvents = 'none';
+              node.style.opacity = '0.7';
+            } catch (e) {
+              // ignorar se não houver elementos
+            }
+          });
         }
       }
 
