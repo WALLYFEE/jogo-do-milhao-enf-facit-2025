@@ -193,6 +193,54 @@
         background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
         animation: shimmer 3s infinite;
       }
+
+      /* Lateral de apresentadoras (fixa, não altera layout) */
+      .presenters-sidebar {
+        position: fixed;
+        left: 18px;
+        top: 96px;
+        width: 260px;
+        bottom: 24px;
+        padding: 20px;
+        background: linear-gradient(180deg, rgba(17,24,39,0.9), rgba(31,41,55,0.85));
+        border: 1px solid rgba(255,255,255,0.04);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        color: var(--muted);
+        z-index: 5;
+        overflow: auto;
+      }
+
+      .presenters-sidebar .ps-title {
+        color: var(--brand);
+        font-weight: 800;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+      }
+
+      .presenters-sidebar .ps-discipline {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+
+      .presenters-sidebar ol {
+        margin: 0;
+        padding: 0 0 0 18px;
+        list-style: decimal;
+        color: var(--text);
+      }
+
+      .presenters-sidebar ol li {
+        margin-bottom: 10px;
+        font-size: 0.95rem;
+        line-height: 1.2;
+      }
+
+      @media (max-width: 1100px) {
+        /* Esconder a lateral em telas menores para não quebrar layout */
+        .presenters-sidebar { display: none; }
+      }
       
       @keyframes shimmer {
         0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
@@ -667,8 +715,7 @@
 
         <footer>
           <div class="hint">
-            Levante a plaquinha antes de <strong>10s</strong>! Ao final, a
-            resposta correta aparece automaticamente.<br />
+            Levante a plaquinha antes de <strong>10s</strong>! Ao final, clique em <strong>Revelar</strong> para mostrar a resposta.<br />
             Atalhos: <kbd>Espaço</kbd> Iniciar/Reset • <kbd>R</kbd> Revelar •
             <kbd>N</kbd> Próxima • <kbd>P</kbd> Anterior • <kbd>F</kbd> Tela
             cheia
@@ -676,6 +723,20 @@
         </footer>
       </div>
     </div>
+
+    <!-- Lateral de apresentadoras (não altera a estrutura principal) -->
+    <aside class="presenters-sidebar" aria-label="Apresentadoras">
+      <div class="ps-title">Dicentes</div>   
+      <ol>
+        <li>ERIKA CRISTINA LEITE RODRIGUES</li>
+        <li>LAURA AMARAL TAVARES CARREIRO</li>
+        <li>LORENA JOSEFANNE MARTINS SOUSA</li>
+        <li>MARIA CLARA BORGES GUIMARÃES</li>
+        <li>NATHALY LOPES BARRETO</li>
+        <li>YASMIM ARAÚJO DIAS</li>
+      </ol>
+      <div class="ps-discipline">Disciplina: Assistência de enfermagem em obstetrícia e neonatologia</div>
+    </aside>
 
     <script>
       const quiz = [
